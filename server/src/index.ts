@@ -4,6 +4,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import connectDB from './database';
 import authRoutes from './routes/authRoutes';
+import contactRoutes from './routes/contactRoutes';
+import tagRoutes from './routes/tagRoutes';
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.use(helmet());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/contacts', contactRoutes);
+app.use('/api/tags', tagRoutes)
 
 app.get('/', (req, res) => {
   res.send('API is running...');
