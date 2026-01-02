@@ -15,7 +15,7 @@ const AuthLayout = ({ children, title }: AuthLayoutProps) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                bgcolor: '#f5f5f5'
+                // bgcolor: '#f5f5f5'
             }}
         >
             <Container maxWidth="xs">
