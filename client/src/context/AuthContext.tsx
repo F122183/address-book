@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const login = async (formData: any) => {
-        const { data } = await api.post('/auth/register', formData);
+        const { data } = await api.post('/auth/login', formData);
         setUser(data);
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data));

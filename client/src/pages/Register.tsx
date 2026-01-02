@@ -4,27 +4,28 @@ import { useAuth } from '../context/AuthContext';
 import { Box, TextField, Button, Alert } from '@mui/material';
 import AuthLayout from '../components/AuthLayout';
 
-const Login = () => {
+const Register = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const { login } = useAuth();
+    const { register } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         try {
-            await login({ email, password });
+            await register({ username, email, password });
             navigate('/');
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed');
+            setError(err.response?.data?.message || 'Registration failed');
         }
     };
 
     return (
-        <AuthLayout title="Sign In">
+        <AuthLayout title="Sign Up">
             {error && <Alert severity="error" sx={{ mb: 2, width: '100%' }}>{error}</Alert>}
 
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
@@ -32,9 +33,17 @@ const Login = () => {
                     margin="normal"
                     required
                     fullWidth
+                    label="Username"
+                    autoFocus
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
                     label="Email Address"
                     autoComplete="email"
-                    autoFocus
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
@@ -44,7 +53,7 @@ const Login = () => {
                     fullWidth
                     label="Password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
@@ -53,14 +62,15 @@ const Login = () => {
                     type="submit"
                     fullWidth
                     variant="contained"
+                    color="secondary"
                     sx={{ mt: 3, mb: 2 }}
                 >
-                    Sign In
+                    Sign Up
                 </Button>
 
                 <Box textAlign="center">
-                    <Link to="/register" style={{ textDecoration: 'none', color: '#1976d2' }}>
-                        {"Don't have an account? Sign Up"}
+                    <Link to="/login" style={{ textDecoration: 'none', color: '#9c27b0' }}>
+                        {"Already have an account? Sign In"}
                     </Link>
                 </Box>
             </Box>
@@ -68,4 +78,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;
