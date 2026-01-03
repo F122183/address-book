@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# Address Book - Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend application for the Address Book (Personal CRM). Built with React, TypeScript, and Material UI v6, offering a modern, responsive, and theme-aware interface for managing personal contacts.
 
-Currently, two official plugins are available:
+## 🚀 Features implemented
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Core Functionality
+- **Authentication:** Secure Login and Registration pages with JWT storage.
+- **Dashboard:** Responsive grid layout displaying contact cards.
+- **CRUD Operations:** Full capability to Create, Read, Update, and Delete contacts.
+- **Custom Fields:** Dynamic key-value pair system allowing users to add arbitrary data (e.g., Birthday, LinkedIn) to any contact.
+- **Tagging System:**
+    - Create/Delete tags.
+    - Assign colors to tags.
+    - Filter dashboard by specific tags.
+    - Visual "Chips" on contact cards.
+- **Search & Filter:** Real-time client-side search (by name/email) and tag filtering.
 
-## React Compiler
+### UX & UI Polish
+- **Dark/Light Mode:** Global theme toggle using React Context and MUI ThemeProvider.
+- **Responsive Design:** Adapts to mobile and desktop screens using MUI Grid v6.
+- **Interactive Modals:** All forms (Add, Edit, Manage Tags) open in clean Dialog components.
+- **Data Safety:** Confirmation dialogs before deleting data.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠 Tech Stack
 
-## Expanding the ESLint configuration
+- **Framework:** React 18 + Vite
+- **Language:** TypeScript
+- **UI Library:** Material UI (MUI) v6
+- **Icons:** MUI Icons Material
+- **Routing:** React Router DOM v6
+- **HTTP Client:** Axios (configured with interceptors for Auth headers)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📂 Project Structure
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```text
+src/
+├── api/
+│   └── axios.ts           # Centralized Axios instance with JWT interceptor
+├── components/
+│   ├── ContactForm.tsx    # Complex form for Creating AND Editing contacts
+│   ├── ContactDetails.tsx # Read-only modal displaying full profile + custom fields
+│   ├── Navbar.tsx         # Navigation, Logout, and Theme Toggle logic
+│   └── TagManager.tsx     # Modal for creating/deleting tags
+├── pages/
+│   ├── Dashboard.tsx      # Main application view (Grid + Search Toolbar)
+│   ├── Login.tsx          # Auth page
+│   └── Register.tsx       # Auth page
+├── App.tsx                # Route definitions & Theme Provider setup
+├── ColorModeContext.ts    # Independent Context for Light/Dark mode state
+└── main.tsx               # Entry point
