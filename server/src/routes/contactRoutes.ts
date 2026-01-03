@@ -1,13 +1,20 @@
 import express from 'express';
-import { getContacts, createContact } from '../controllers/contactController';
 import { protect } from '../middleware/authMiddleware';
+import { 
+  getContacts, 
+  createContact, 
+  updateContact,
+  deleteContact
+} from '../controllers/contactController';
 
 const router = express.Router();
 
-router.use(protect);
-
 router.route('/')
-    .get(getContacts)
-    .post(createContact);
+    .get(protect, getContacts)
+    .post(protect, createContact);
+
+router.route('/:id')
+    .put(protect, updateContact)
+    .delete(protect, deleteContact);
 
 export default router;

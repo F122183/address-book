@@ -1,6 +1,6 @@
 import {
     Dialog, DialogTitle, DialogContent, DialogActions,
-    Button, Typography, Grid, Divider, Box, Chip
+    Button, Typography, Grid, Divider, Box
 } from '@mui/material';
 
 interface Contact {
@@ -14,6 +14,7 @@ interface Contact {
     firm?: string;
     address?: string;
     comment?: string;
+    customFields?: Record<string, string>;
 }
 
 interface ContactDetailsProps {
@@ -86,12 +87,28 @@ const ContactDetails = ({ open, onClose, contact }: ContactDetailsProps) => {
                             </Grid>
                             <Grid size={{ xs: 12 }}>
                                 <Typography variant="overline" color="text.secondary">Private Notes</Typography>
-                                <Box sx={{ bgcolor: '#f5f5f5', p: 2, borderRadius: 1 }}>
+                                <Box sx={{ bgcolor: 'action.hover', p: 2, borderRadius: 1 }}>
                                     <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
                                         {contact.comment}
                                     </Typography>
                                 </Box>
                             </Grid>
+                        </>
+                    )}
+
+                    {contact.customFields && Object.keys(contact.customFields).length > 0 && (
+                        <>
+                            <Grid size={{ xs: 12 }}>
+                                <Divider sx={{ my: 1 }} />
+                                <Typography variant="overline" color="text.secondary">Additional Info</Typography>
+                            </Grid>
+
+                            {Object.entries(contact.customFields).map(([key, value]) => (
+                                <Grid size={{ xs: 12, sm: 6 }} key={key}>
+                                    <Typography variant="body2" fontWeight="bold">{key}</Typography>
+                                    <Typography variant="body1">{value}</Typography>
+                                </Grid>
+                            ))}
                         </>
                     )}
 

@@ -1,37 +1,44 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import ImportContactsIcon from '@mui/icons-material/ImportContacts';
+import { ColorModeContext } from '../ColorModeContext';
 
-const NavBar = () => {
-    const { user, logout } = useAuth();
+const Navbar = () => {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const colorMode = useContext(ColorModeContext);
 
     const handleLogout = () => {
-        logout();
+        localStorage.removeItem('token');
         navigate('/login');
     };
 
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                    Address Book
-                </Typography>
+                <Box display="flex" alignItems="center" gap={1.5} sx={{ flexGrow: 1 }}>
+                    <ImportContactsIcon />
+                    <Typography variant="h6" fontWeight="bold">
+                        Address Book
+                    </Typography>
+                </Box>
 
-                {user && (
-                    <Box display="flex" alignItems="center" gap={2}>
-                        <Typography variant="subtitle1">
-                            {user.username}
-                        </Typography>
-                        <Button color="inherit" onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </Box>
-                )}
+                <Box display="flex" alignItems="center" gap={1}>
+                    <IconButton onClick={colorMode.toggleColorMode} color="inherit">
+                        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                    </IconButton>
+
+                    <Button color="inherit" onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </Box>
             </Toolbar>
         </AppBar>
     );
 };
 
-export default NavBar;
+export default Navbar;

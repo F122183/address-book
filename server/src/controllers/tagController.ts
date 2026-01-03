@@ -7,7 +7,7 @@ import Tag from "../models/Tag";
 export const getTags = async (req: any, res: Response): Promise<void> => {
 
     try {
-        const tags = await Tag.find({ user: req.user._id }).populate('parent', 'name color');
+        const tags = await Tag.find({ user: req.user._id }).populate('parent', 'name color').sort({ name: 1 });
         res.json(tags);
     } catch (error) {
         res.status(500).json({
@@ -51,22 +51,22 @@ export const deleteTag = async (req: any, res: Response): Promise<void> => {
     try {
         const tag = await Tag.findById(req.params.id);
 
-        if(!tag){
+        if (!tag) {
             res.status(404).json({
-                message:'Tag not found'
+                message: 'Tag not found'
             });
             return;
         }
 
-        if(tag.user.toString() !== req.user._id.toString()) {
+        if (tag.user.toString() !== req.user._id.toString()) {
             res.status(401).json({
                 message: 'Not authorized'
             });
             return;
         }
 
-        await Tag.updateMany({parent: tag._id}, { parent: null});
-        await Tag.deleteOne();
+        await Tag.updateMany({ parent: tag._id }, { parent: null });
+        await tag.deleteOne();
         res.json({
             message: 'Tag removed'
         });
