@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import { useAuth } from '../context/AuthContext';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
@@ -9,11 +10,12 @@ import { ColorModeContext } from '../ColorModeContext';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const theme = useTheme();
     const colorMode = useContext(ColorModeContext);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
+        logout();    
         navigate('/login');
     };
 

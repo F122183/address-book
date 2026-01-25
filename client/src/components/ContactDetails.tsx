@@ -3,6 +3,8 @@ import {
     Button, Typography, Grid, Divider, Box
 } from '@mui/material';
 
+import api from '../api/axios';
+
 interface Contact {
     _id: string;
     firstName: string;
@@ -23,8 +25,34 @@ interface ContactDetailsProps {
     contact: Contact | null;
 }
 
+
 const ContactDetails = ({ open, onClose, contact }: ContactDetailsProps) => {
     if (!contact) return null;
+
+const handleExportContact = async () => {
+    if (!contact) return;
+
+    try {
+        const response = await api.get(
+            `/contacts/${contact._id}/export`,
+            { responseType: 'blob' }
+        );
+
+        const blob = new Blob([response.data], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${contact.firstName}_${contact.lastName}.csv`;
+        document.body.appendChild(link);
+        link.click();
+
+        link.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Contact export failed', error);
+    }
+};
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -116,6 +144,12 @@ const ContactDetails = ({ open, onClose, contact }: ContactDetailsProps) => {
             </DialogContent>
 
             <DialogActions>
+                <Button
+                    onClick={handleExportContact}
+                    color="secondary"
+                >
+                    Export contact (CSV)
+                </Button>
                 <Button onClick={onClose}>Close</Button>
             </DialogActions>
         </Dialog>

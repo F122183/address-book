@@ -153,6 +153,44 @@ const ContactForm = ({ open, onClose, onSave, initialData }: ContactFormProps) =
         onClose();
     };
 
+const handleImportCSV = async (file: File) => {
+    try {
+        const formDataUpload = new FormData();
+        formDataUpload.append('file', file);
+
+        const { data } = await api.post('/contacts/import-one', formDataUpload, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        setFormData(prev => ({
+            ...prev,
+            firstName: data.firstName || '',
+            lastName: data.lastName || '',
+            email: data.email || '',
+            phone: data.phone || '',
+            mobile: data.mobile || '',
+            fax: data.fax || '',
+            firm: data.firm || '',
+            address: data.address || '',
+            comment: data.comment || '',
+            tags: []
+        }));
+
+        if (data.customFields) {
+            const fieldsArray = Object.entries(data.customFields).map(([key, value]) => ({
+                label: key,
+                value: String(value)
+            }));
+            setCustomFields(fieldsArray);
+        } else {
+            setCustomFields([]);
+        }
+
+    } catch (err: any) {
+        setError(err.response?.data?.message || 'Import failed');
+    }
+};
+
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
             <DialogTitle>{initialData?._id ? 'Edit Contact' : 'Add New Contact'}</DialogTitle>
@@ -263,6 +301,19 @@ const ContactForm = ({ open, onClose, onSave, initialData }: ContactFormProps) =
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="inherit">Cancel</Button>
+                <Button component="label" color="secondary">
+                    Import Contact (CSV)
+                    <input
+                        type="file"
+                        accept=".csv"
+                        hidden
+                        onChange={(e) => {
+                            if (e.target.files?.[0]) {
+                                handleImportCSV(e.target.files[0]);
+                            }
+                        }}
+                    />
+                </Button>
                 <Button onClick={handleSubmit} variant="contained" color="primary">
                     {initialData?._id ? 'Update Contact' : 'Save Contact'}
                 </Button>

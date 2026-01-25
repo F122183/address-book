@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import User, { IUser } from '../models/User';
 
 const generateToken = (id: string) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET as string, {
+    return jwt.sign({ id }, "dev_super_secret123" as string, {
         expiresIn: '30d'
     });
 };
