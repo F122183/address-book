@@ -33,7 +33,6 @@ interface Contact {
     comment: string;
     tags: Tag[];
     customFields?: Record<string, string>;
-    createdAt: string;
 }
 
 const Dashboard = () => {

@@ -76,6 +76,36 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+export const updateUsername = async (req: any, res: Response): Promise<void> => {
+    try {
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+
+        const { username } = req.body;
+
+        if (!username) {
+            res.status(400).json({ message: 'Username is required' });
+            return;
+        }
+
+        user.username = username;
+
+        const updatedUser = await user.save();
+
+        res.json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email
+        });
+    } catch (error) {
+        res.status(500).json({ message: (error as Error).message });
+    }
+};
+
 //@desc Get user profile
 // @route GET /api/auth/profile
 
